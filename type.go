@@ -79,7 +79,27 @@ func variable() {
     println(*name)
 
 }
+/*
+命名类型：bool int string, 就算底层类型相同的命名类型之间也不能隐式转换
+未命名类型：array slice map channel function   具有相同声明的未命名类型则被视为同一类型
+*/
+func diff_type(){
+    type MyInt int
+    var a MyInt = 11
+    //var b int = a   //编译错误，类型不匹配
+    var b int = int(a)
+    //var c MyInt = b //编译错误，类型不匹配
+    var c MyInt = MyInt(b)
+    println(b, c)
+
+    type MyIntSlice []int
+    var x MyIntSlice = []int{1, 2, 3}  //相同声明的未命名类型，视为同类型
+    var y []int = x
+    fmt.Println(y)
+
+}
 
 func main() {
     variable()
+    diff_type()
 }
