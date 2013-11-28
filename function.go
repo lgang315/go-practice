@@ -1,5 +1,8 @@
 package main
-
+import (
+    "runtime"
+    "fmt"
+)
 
 //接收多个参数，无返回值
 func test(a, b int , c string) {
@@ -66,6 +69,22 @@ func f_closure_defer() {
     for _, f := range fs { f() }
 }
 
+
+//call stack获取调用堆栈信息
+func cs_caller() {
+    fmt.Println(runtime.Caller(1))      //runtime.Caller(n)查看某级堆栈
+}
+func cs_callers() {                     //获取完整堆栈调用信息
+    ps := make([]uintptr, 10)
+    count := runtime.Callers(0, ps)
+
+    for i := 0; i < count; i++ {
+        f := runtime.FuncForPC(ps[i])
+        fmt.Printf("%d, %s\n", i, f.Name())
+        fmt.Println(f)                  //名称、源文件、行号等
+    }
+}
+
 func main() {
     test(1,2,"adf")
     println(add(1, 2))
@@ -87,6 +106,12 @@ func main() {
     //f_defer(10, 0)                  //出现严重error，defer也会执行
 
     f_closure_defer()
+
+    cs_caller()
+    a := func() {
+        cs_callers()
+    }
+    a()
 }
 
 
